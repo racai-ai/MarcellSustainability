@@ -1,0 +1,16 @@
+{
+
+"RegistrationEnabled":false,
+"TaskRunners":13,
+
+"tools.StanfordCoreNLP.path":"/data/vasile/stanford-corenlp-full-2018-10-05",
+"tools.wc.path":"/usr/bin/wc",
+
+"tools.java.path":"/data/programs/jdk1.8.0_231/bin/java",
+
+"tools.python.venv":"/data/venv_keras",
+
+"owner_user":"www-data",
+"owner_group":"www-data"
+
+}
