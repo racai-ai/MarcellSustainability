@@ -1,0 +1,63 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "e9d46994316545146c20c2abe89f7cb4",
+    "packages": [
+        {
+            "name": "audero/audero-wav-extractor",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AurelioDeRosa/Audero-Wav-Extractor.git",
+                "reference": "2b0badf168e82dd3cb9f3a398500b43fdc88e2f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AurelioDeRosa/Audero-Wav-Extractor/zipball/2b0badf168e82dd3cb9f3a398500b43fdc88e2f9",
+                "reference": "2b0badf168e82dd3cb9f3a398500b43fdc88e2f9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Audero\\WavExtractor": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "CC-BY-NC-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Aurelio De Rosa",
+                    "email": "aurelioderosa@gmail.com",
+                    "homepage": "http://www.audero.it",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Audero Wav Extractor is a PHP library that allows to extract a chunk from a wav file. The extracted chunk can be saved on the hard disk, can be forced to be prompted as download by the user's browser or returned as a string for a later processing.",
+            "homepage": "https://bitbucket.org/AurelioDeRosa/audero-wav-extractor",
+            "keywords": [
+                "audio",
+                "extractor",
+                "wav",
+                "wave"
+            ],
+            "time": "2013-02-03T03:13:34+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

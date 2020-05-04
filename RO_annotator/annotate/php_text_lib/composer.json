@@ -1,0 +1,5 @@
+{
+    "require": {
+	"audero/audero-wav-extractor": "2.1.*"
+    }
+}
