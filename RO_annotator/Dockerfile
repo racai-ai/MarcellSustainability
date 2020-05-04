@@ -29,6 +29,31 @@ COPY --from=intermediate /ner/ /ner/
 COPY --from=intermediate /ner/web/ /var/www/site/
 COPY annotate/ /var/www/site/
 RUN chmod a+rw /var/www/site/corrector
+# Install stuff for the NLPipe platform
+# Install Perl5 only if it's not installed (it usually is)
+RUN test "`perl -e 'print("It works!")'`" != "It works!" && apt-get install -y perl
+# Need g++ and make for cpan install
+RUN apt-get install -y wget curl make automake autoconf gcc g++ flex bison
+# Needed by BerkeleyDB Perl module
+RUN apt-get install -y libdb5.3 libdb5.3++ libdb5.3++-dev libdb5.3-dev
+# Copy already configured (by Radu) CPAN .pm file
+COPY docker/MyConfig.pm /
+RUN cpan -j MyConfig.pm install Unicode::String
+RUN cpan -j MyConfig.pm install Algorithm::Diff
+RUN cpan -j MyConfig.pm install BerkeleyDB
+# We do not need MyConfig.pm anymore
+RUN rm -fv /MyConfig.pm
+# These are the NLPipe Python 3.6 dependencies
+RUN apt-get install -y python3.6
+RUN pip3 install nlpcube
+RUN pip3 install filelock
+RUN pip3 install flask
+RUN pip3 install flask-restful
+RUN pip3 install uwsgi
+RUN pip3 install pytest
+COPY nlpipe/ /root/
+RUN cd /root/nlpipe && chmod a+rx *.sh && cd /
+# End stuff for NLPipe platform
 
 RUN sed -i "s/error_reporting = .*$/error_reporting = E_ERROR | E_WARNING | E_PARSE/" /etc/php/7.2/apache2/php.ini
 
