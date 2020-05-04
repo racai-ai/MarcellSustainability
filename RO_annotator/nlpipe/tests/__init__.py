@@ -1,4 +1,4 @@
-from Teprolin import Teprolin
+from NLPipe import NLPipe
 
 # The global object used in all testing
-tepro = Teprolin()
+nlpipe = NLPipe()

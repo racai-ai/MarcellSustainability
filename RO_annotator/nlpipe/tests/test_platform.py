@@ -1,5 +1,5 @@
-from tests import tepro
-from TeproAlgo import TeproAlgo
+from tests import nlpipe
+from PipAlgo import PipAlgo
 
 text = "La 7      minute de centrul Brasovului,  imobilul\tpropus \
     spre vanzare se adreseaza\t\tcelor care isi doresc un spatiu \
@@ -10,7 +10,7 @@ text3 = "Instanta suprema reia astazi judecarea."
 text4 = "Diabetul zaharat este un sindrom caracterizat prin valori crescute ale concentrației glucozei în sânge (hiperglicemie) și dezechilibrarea metabolismului."
 
 def test_TextNorm():
-    dto = tepro.pcExec(text, [TeproAlgo.getTextNormOperName()])
+    dto = nlpipe.pcExec(text, [PipAlgo.getTextNormOperName()])
     
     # Spaces have been removed...
     assert dto.getText()[5] == 'm'
@@ -26,7 +26,7 @@ def test_TextNorm():
     assert dto.getText()[128] == '\n'
    
 def test_DiacRestore():
-    dto = tepro.pcExec(text, [TeproAlgo.getDiacRestorationOperName()])
+    dto = nlpipe.pcExec(text, [PipAlgo.getDiacRestorationOperName()])
 
     # Diacs have been inserted at the
     # proper places...
@@ -42,13 +42,13 @@ def test_DiacRestore():
     # spațiu
     assert dto.getText()[105] == 'ț'
 
-def test_TTLandTTS():
-    tepro.configure(TeproAlgo.getSentenceSplittingOperName(), TeproAlgo.algoTTL)
-    tepro.configure(TeproAlgo.getTokenizationOperName(), TeproAlgo.algoTTL)
-    tepro.configure(TeproAlgo.getPOSTaggingOperName(), TeproAlgo.algoTTL)
-    tepro.configure(TeproAlgo.getLemmatizationOperName(), TeproAlgo.algoTTL)
+def test_TTL():
+    nlpipe.configure(PipAlgo.getSentenceSplittingOperName(), PipAlgo.algoTTL)
+    nlpipe.configure(PipAlgo.getTokenizationOperName(), PipAlgo.algoTTL)
+    nlpipe.configure(PipAlgo.getPOSTaggingOperName(), PipAlgo.algoTTL)
+    nlpipe.configure(PipAlgo.getLemmatizationOperName(), PipAlgo.algoTTL)
 
-    dto = tepro.pcExec(text, [TeproAlgo.getChunkingOperName()])
+    dto = nlpipe.pcExec(text, [PipAlgo.getChunkingOperName()])
     
     # Processed two sentences...
     assert dto.getNumberOfSentences() == 2
@@ -58,7 +58,6 @@ def test_TTLandTTS():
     assert dto.getSentenceTokens(0)[0].getMSD() == 'Spsa'
     assert dto.getSentenceTokens(0)[0].getLemma() == 'la'
     assert dto.getSentenceTokens(0)[1].getWordForm() == '7'
-    assert dto.getSentenceTokens(0)[1].getExpansion() == 'șapte'
     assert dto.getSentenceTokens(0)[5].getWordForm() == 'Brașovului'
     assert dto.getSentenceTokens(0)[5].getLemma() == 'Brașov'
     assert dto.getSentenceTokens(0)[5].getMSD() == 'Npmsoy'
@@ -68,18 +67,17 @@ def test_TTLandTTS():
 
     # For the second sentence:
     assert dto.getSentenceTokens(1)[0].getWordForm() == 'Amplasarea'
-    assert dto.getSentenceTokens(1)[1].getSyllables() == "con.str'uc.ți.ei"
-    assert dto.getSentenceTokens(1)[1].getPhonetical() == "k.o.n.s.t.r.u.k.ts.i.e.j"
     assert dto.getSentenceTokens(1)[22].getWordForm() == 'metri'
     assert dto.getSentenceTokens(1)[22].getCTAG() == 'NPN'
 
 def test_MWEsAndDepTransfer():
-    tepro.configure(TeproAlgo.getSentenceSplittingOperName(), TeproAlgo.algoTTL)
-    tepro.configure(TeproAlgo.getTokenizationOperName(), TeproAlgo.algoTTL)
-    tepro.configure(TeproAlgo.getPOSTaggingOperName(), TeproAlgo.algoTTL)
-    tepro.configure(TeproAlgo.getLemmatizationOperName(), TeproAlgo.algoTTL)
+    nlpipe.configure(
+        PipAlgo.getSentenceSplittingOperName(), PipAlgo.algoTTL)
+    nlpipe.configure(PipAlgo.getTokenizationOperName(), PipAlgo.algoTTL)
+    nlpipe.configure(PipAlgo.getPOSTaggingOperName(), PipAlgo.algoTTL)
+    nlpipe.configure(PipAlgo.getLemmatizationOperName(), PipAlgo.algoTTL)
 
-    dto = tepro.pcFull(text2)
+    dto = nlpipe.pcFull(text2)
 
     assert dto.getSentenceTokens(0)[3].getWordForm() == 'o_să'
     assert dto.getSentenceTokens(0)[3].getMSD() == 'Qf'
@@ -87,12 +85,13 @@ def test_MWEsAndDepTransfer():
     assert dto.getSentenceTokens(0)[3].getDepRel() == 'mark'
 
 def test_NLPCube():
-    tepro.configure(TeproAlgo.getSentenceSplittingOperName(), TeproAlgo.algoCube)
-    tepro.configure(TeproAlgo.getTokenizationOperName(), TeproAlgo.algoCube)
-    tepro.configure(TeproAlgo.getPOSTaggingOperName(), TeproAlgo.algoCube)
-    tepro.configure(TeproAlgo.getLemmatizationOperName(), TeproAlgo.algoCube)
+    nlpipe.configure(
+        PipAlgo.getSentenceSplittingOperName(), PipAlgo.algoCube)
+    nlpipe.configure(PipAlgo.getTokenizationOperName(), PipAlgo.algoCube)
+    nlpipe.configure(PipAlgo.getPOSTaggingOperName(), PipAlgo.algoCube)
+    nlpipe.configure(PipAlgo.getLemmatizationOperName(), PipAlgo.algoCube)
 
-    dto = tepro.pcExec(text, [TeproAlgo.getDependencyParsingOperName()])
+    dto = nlpipe.pcExec(text, [PipAlgo.getDependencyParsingOperName()])
     
     # Processed two sentences...
     assert dto.getNumberOfSentences() == 2
@@ -113,7 +112,7 @@ def test_NLPCube():
     assert dto.getSentenceTokens(1)[1].getDepRel() == 'nmod'
 
 def test_NEROps():
-    dto = tepro.pcExec(text3, [TeproAlgo.getNamedEntityRecognitionOperName()])
+    dto = nlpipe.pcExec(text3, [PipAlgo.getNamedEntityRecognitionOperName()])
 
     # Check NER annotations
     assert dto.getSentenceTokens(0)[0].getNER() == 'ORG'
@@ -121,7 +120,8 @@ def test_NEROps():
     assert dto.getSentenceTokens(0)[3].getNER() == 'TIME'
 
 def test_BioNEROps():
-    dto = tepro.pcExec(text4, [TeproAlgo.getBiomedicalNamedEntityRecognitionOperName()])
+    dto = nlpipe.pcExec(
+        text4, [PipAlgo.getBiomedicalNamedEntityRecognitionOperName()])
 
     # Check BioNER annotations
     assert dto.getSentenceTokens(0)[0].getBioNER() == 'B-DISO'

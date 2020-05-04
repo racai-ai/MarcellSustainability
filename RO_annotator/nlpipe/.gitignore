@@ -5,10 +5,12 @@ teprolin-stats.txt.lock
 ttl-port.txt.lock
 
 # Python caches
-bioner/__pycache__
-cubenlp/__pycache__
-diac/__pycache__
-ner/__pycache__
-tests/__pycache__
-tnorm/__pycache__
-ttl/__pycache__
+__pycache__/
+bioner/__pycache__/
+cubenlp/__pycache__/
+diac/__pycache__/
+ner/__pycache__/
+tests/__pycache__/
+tnorm/__pycache__/
+ttl/__pycache__/
+.vscode/launch.json

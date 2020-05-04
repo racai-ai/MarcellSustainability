@@ -234,12 +234,9 @@ class NLPipe(object):
         """This processing chain will make sure that the full list of
         requested operations (ops) are executed on the input text."""
 
-        # 0. Increase the number of requests by 1
-        # with every call to this method.
-        self._requests += 1
         configuredApps = []
 
-        # 0.1 Dynamically alter the configuration
+        # 0 Dynamically alter the configuration
         # depending on exceptions.
         # For instance ner-icia requires ttl-icia, not nlp-cube-adobe
         for op in ops:
@@ -303,10 +300,6 @@ class NLPipe(object):
 
     def _destroyAllApps(self):
         """Destroys the instantiated NLP apps."""
-
-        # Also dump the latest statistics
-        # that this object has.
-        self._writeStatsFile()
 
         for app in self._apps:
             print("{0}.{1}[{2}]: destroying NLP app '{3}'".\

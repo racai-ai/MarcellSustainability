@@ -35,4 +35,6 @@ BIONERWORDEMBEDFILE = os.path.expanduser("~") + \
     os.sep + 'embeddings' + os.sep + 'bioro_skip.200.1.5.vec'
 
 # Provided by Vasile; localhost for the Docker container.
-GENERALNERURL = 'http://127.0.0.1/ner/ner.php'
+#GENERALNERURL = 'http://127.0.0.1/ner/ner.php'
+# Just for testing purposes.
+GENERALNERURL = 'http://89.38.230.23/ner/ner.php'

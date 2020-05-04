@@ -46,7 +46,7 @@ def main():
         "Referindu-se la bugetul pe 2019, șeful statului a spus că acesta este „nerealist și supraevaluat”, calificându-l drept unul al „rușinii naționale”.\n\n" + \
         "Președintele a acuzat PSD că nu are bani de investiții, dar are bani pentru partid. " + \
         "„150 de milioane va primi PSD din finanțarea partidelor, din 270 de milioane propuse pentru finanțarea partidelor. " + \
-        "PSD și-a tras bani de 20 de ori mai mult decât anul trecut (președinția a precizat ulterior că această comparație a fost făcută cu 2016-n.r.). " + \
+        "PSD și-a tras bani de 20 de ori mai mult decât anul trecut (președinția a precizat ulterior că această comparație a fost făcută cu 2016 - n.r.). " + \
         "Pentru asta au bani”, a spus Iohannis.\n"
     dto = pipe.pcFull(text)
     dto.dumpConllX()
@@ -75,12 +75,6 @@ def main():
     # Example 2: using another canned pc, e.g. lemmatization.
     dto = pipe.pcLemma(text)
     print(json.dumps(dto.jsonDict(), default=lambda x: x.__dict__))
-
-    # Example 3: requesting specific operations, e.g. hyphenation and phonetic transcription.
-    # NLPipe will figure out what else has to run such that these two operations are applied.
-    dto = pipe.pcExec(
-        text, [PipAlgo.getHyphenationOperName(), PipAlgo.getPhoneticTranscriptionOperName()])
-    dto.dumpConllX()
 
 # Do this on Windows, if multiprocessing is used down the call chain.
 # To debug in MS Visual Studio 2017, add if __name__ statement in all modules where

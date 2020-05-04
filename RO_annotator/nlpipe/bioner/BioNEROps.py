@@ -2,7 +2,7 @@ import os
 import inspect
 from pathlib import Path
 from PipConfig import BIONERMODELNAME, BIONERWORDEMBEDFILE
-from PipApi import TeproApi
+from PipApi import PipApi
 from PipAlgo import PipAlgo
 from PipTok import PipTok
 from bioner.io_utils.encodings import Encodings
