@@ -10,7 +10,7 @@ from PipAlgo import PipAlgo
 from PipApi import PipApi
 from PipDTO import PipDTO
 
-# Import all NLP apps that are implemented
+# Import all NLP apps that are implemented.
 from tnorm.TextNorm import TextNorm
 from diac.DiacRestore import DiacRestore
 from cubenlp.CubeNLP import CubeNLP
