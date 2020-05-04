@@ -8,7 +8,6 @@ RUN wget http://relate.racai.ro/resources/ner/ner.tar.bz2 -O /ner.tar.bz2 && tar
 RUN wget http://relate.racai.ro/resources/ner/COROLA.vectors.gz -O /ner/COROLA.vectors.gz && gunzip /ner/COROLA.vectors.gz
 RUN wget http://relate.racai.ro/resources/ner/COROLA.words.gz -O /ner/COROLA.words.gz && gunzip /ner/COROLA.words.gz
 RUN wget http://relate.racai.ro/resources/ner/combined_ctag.clean.PERLOCORG.4.ser.gz -O /ner/combined_ctag.clean.PERLOCORG.4.ser.gz
-RUN wget http://relate.racai.ro/resources/ner/combined_ctag.clean.PERLOCORG.4.ser.gz -O /ner/combined_ctag.clean.PERLOCORG.4.ser.gz
 RUN wget http://relate.racai.ro/resources/ner/jdk1.8.0_191.tar.bz2 -O /ner/jdk1.8.0_191.tar.bz2 && tar -C /ner -jxf /ner/jdk1.8.0_191.tar.bz2 && rm -f /ner/jdk1.8.0_191.tar.bz2
 RUN wget http://relate.racai.ro/resources/ner/stanford-ner-2018-10-16-mod.tar.bz2 -O /ner/stanford-ner-2018-10-16-mod.tar.bz2 && tar -C /ner -jxf /ner/stanford-ner-2018-10-16-mod.tar.bz2 && rm -f /ner/stanford-ner-2018-10-16-mod.tar.bz2
 RUN wget http://relate.racai.ro/resources/ner/web.tar.bz2 -O /ner/web.tar.bz2 && tar -C /ner -jxf /ner/web.tar.bz2 && rm -f /ner/web.tar.bz2
