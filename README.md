@@ -1,2 +1,2 @@
 # MarcellSustainability
-Ensuring sustainability in Marcell project by implementing docker images
+Ensuring sustainability in Marcell project by implementing Docker images.
