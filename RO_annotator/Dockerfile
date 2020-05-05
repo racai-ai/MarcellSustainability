@@ -59,6 +59,10 @@ COPY --from=intermediate /root/perl/ /root/perl/
 COPY --from=intermediate /root/.nlpipe/ /root/.nlpipe/
 # These are the NLPipe Python 3.6 dependencies
 RUN pip3 install nlpcube
+# Load NLP-Cube resources
+COPY docker/nlpcube-install-resources.py /root/
+RUN python3 /root/nlpcube-install-resources.py
+# End resource loading
 RUN pip3 install filelock
 RUN pip3 install flask
 RUN pip3 install flask-restful
@@ -70,11 +74,10 @@ RUN cd /root/nlpipe && chmod a+rx *.sh && cd /
 # These should PASS, othewise the build has to fail
 COPY docker/perl-check-install.sh /root/
 RUN chmod a+rx /root/perl-check-install.sh && /root/perl-check-install.sh
-# No need for it, function performed
-RUN rm -fv /root/perl-check-install.sh
-# Debug
-COPY docker/nlpipe-run-ws.sh /root/
-RUN chmod a+rx /root/nlpipe-run-ws.sh
+COPY docker/nlpipe-check-install.sh /root/
+RUN chmod a+rx /root/nlpipe-check-install.sh && /root/nlpipe-check-install.sh
+# Remove check scripts
+RUN rm -fv /root/perl-check-install.sh /root/nlpcube-install-resources.py /root/nlpipe-check-install.sh
 # End stuff for NLPipe platform
 
 RUN sed -i "s/error_reporting = .*$/error_reporting = E_ERROR | E_WARNING | E_PARSE/" /etc/php/7.2/apache2/php.ini
