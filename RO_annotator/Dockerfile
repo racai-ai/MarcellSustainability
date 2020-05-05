@@ -49,7 +49,7 @@ RUN chmod a+rw /var/www/site/corrector
 # Install Perl5 only if it's not installed (it usually is)
 RUN command -v perl >/dev/null || apt-get install -y perl
 # Needed by BerkeleyDB Perl module; also add Python 3 into the mix
-RUN apt-get update && apt-get install -y libdb5.3 libdb5.3++ python3.6
+RUN apt-get update && apt-get install -y libdb5.3 libdb5.3++ python3.6 python3-pip
 ENV PERL5VER `perl -V:version | grep -Po "5\.[0-9]+(?:\.[0-9]+)?"`
 # If perl version changes... No problem, we have PERL5VER now
 ENV PERL5LIB /root/perl/lib/x86_64-linux-gnu/perl/${PERL5VER}:/root/perl/share/perl/${PERL5VER}
