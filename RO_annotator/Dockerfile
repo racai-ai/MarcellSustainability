@@ -20,6 +20,22 @@ RUN mkdir /ner/IATE-EUROVOC-Annotator
 RUN cp /ner/IATE-EUROVOC-Annotator-build/src/annotate /ner/IATE-EUROVOC-Annotator
 RUN cp -r /ner/IATE-EUROVOC-Annotator-build/resources /ner/IATE-EUROVOC-Annotator
 RUN rm -fr /ner/IATE-EUROVOC-Annotator-build
+# Install Perl CPAN packages for NLPipe
+# Install Perl5 only if it's not installed (it usually is)
+RUN command -v perl >/dev/null || apt-get install -y perl
+# Needed by BerkeleyDB Perl module (development only)
+RUN apt-get update && apt-get install -y libdb5.3++-dev libdb5.3-dev zip unzip gpg makepatch libconfig-yaml-perl
+RUN mkdir -p /root/.cpan/CPAN
+RUN mkdir -p /root/perl
+# Copy already configured (by Radu) CPAN .pm file
+COPY docker/MyConfig.pm /root/.cpan/CPAN
+RUN cpan -i Unicode::String
+RUN cpan -i Algorithm::Diff
+RUN cpan -i BerkeleyDB
+# Copy NLPipe resources
+RUN wget http://relate.racai.ro/resources/nlpipe/nlpipe-resources.tar.gz -O /root/nlpipe-resources.tar.gz && \
+    tar -C /root -xzvf /root/nlpipe-resources.tar.gz && rm -fv /root/nlpipe-resources.tar.gz
+# End NLPipe install stuff
 
 FROM ubuntu:18.04
 ARG DEBIAN_FRONTEND=noninteractive
@@ -29,22 +45,17 @@ COPY --from=intermediate /ner/ /ner/
 COPY --from=intermediate /ner/web/ /var/www/site/
 COPY annotate/ /var/www/site/
 RUN chmod a+rw /var/www/site/corrector
-# Install stuff for the NLPipe platform
+# Stuff for NLPipe platform (run-time)
 # Install Perl5 only if it's not installed (it usually is)
 RUN command -v perl >/dev/null || apt-get install -y perl
-# Need g++ and make for cpan install
-RUN apt-get install -y wget curl make automake autoconf gcc g++ flex bison
-# Needed by BerkeleyDB Perl module
-RUN apt-get install -y libdb5.3 libdb5.3++ libdb5.3++-dev libdb5.3-dev
-# Copy already configured (by Radu) CPAN .pm file
-COPY docker/MyConfig.pm /
-RUN cpan -j MyConfig.pm install Unicode::String
-RUN cpan -j MyConfig.pm install Algorithm::Diff
-RUN cpan -j MyConfig.pm install BerkeleyDB
-# We do not need MyConfig.pm anymore
-RUN rm -fv /MyConfig.pm
+# Needed by BerkeleyDB Perl module; also add Python 3 into the mix
+RUN apt-get update && apt-get install -y libdb5.3 libdb5.3++ python3.6
+ENV PERL5VER `perl -V:version | grep -Po "5\.[0-9]+(?:\.[0-9]+)?"`
+# If perl version changes... No problem, we have PERL5VER now
+ENV PERL5LIB /root/perl/lib/x86_64-linux-gnu/perl/${PERL5VER}:/root/perl/share/perl/${PERL5VER}
+COPY --from=intermediate /root/perl/ /root/
+COPY --from=intermediate /root/.nlpipe/ /root/
 # These are the NLPipe Python 3.6 dependencies
-RUN apt-get install -y python3.6
 RUN pip3 install nlpcube
 RUN pip3 install filelock
 RUN pip3 install flask
@@ -53,6 +64,9 @@ RUN pip3 install uwsgi
 RUN pip3 install pytest
 COPY nlpipe/ /root/
 RUN cd /root/nlpipe && chmod a+rx *.sh && cd /
+# These should PASS, othewise the build has to fail
+RUN cd /root/nlpipe && perl -c PipTTL.pl && cd /
+RUN cd /root/nlpipe && pytest -v tests && cd /
 # End stuff for NLPipe platform
 
 RUN sed -i "s/error_reporting = .*$/error_reporting = E_ERROR | E_WARNING | E_PARSE/" /etc/php/7.2/apache2/php.ini
