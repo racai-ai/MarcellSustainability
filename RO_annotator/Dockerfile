@@ -32,6 +32,7 @@ COPY docker/MyConfig.pm /root/.cpan/CPAN
 RUN cpan -i Unicode::String
 RUN cpan -i Algorithm::Diff
 RUN cpan -i BerkeleyDB
+RUN cpan -i File::HomeDir
 # Copy NLPipe resources
 RUN wget http://relate.racai.ro/resources/nlpipe/nlpipe-resources.tar.gz -O /root/nlpipe-resources.tar.gz && \
     tar -C /root -xzvf /root/nlpipe-resources.tar.gz && rm -fv /root/nlpipe-resources.tar.gz
@@ -50,9 +51,6 @@ RUN chmod a+rw /var/www/site/corrector
 RUN command -v perl >/dev/null || apt-get install -y perl
 # Needed by BerkeleyDB Perl module; also add Python 3 into the mix
 RUN apt-get update && apt-get install -y libdb5.3 libdb5.3++ python3.6 python3-pip
-ENV PERL5VER `perl -V:version | grep -Po "5\.[0-9]+(?:\.[0-9]+)?"`
-# If perl version changes... No problem, we have PERL5VER now
-ENV PERL5LIB /root/perl/lib/x86_64-linux-gnu/perl/${PERL5VER}:/root/perl/share/perl/${PERL5VER}
 RUN mkdir /root/perl
 RUN mkdir /root/.nlpipe
 COPY --from=intermediate /root/perl/ /root/perl/
@@ -68,7 +66,8 @@ RUN mkdir /root/nlpipe
 COPY nlpipe/ /root/nlpipe/
 RUN cd /root/nlpipe && chmod a+rx *.sh && cd /
 # These should PASS, othewise the build has to fail
-RUN cd /root/nlpipe && perl -c PipTTL.pl && cd /
+COPY docker/perl-check-install.sh /root/
+RUN chmod a+rx /root/perl-check-install.sh && /root/perl-check-install.sh
 RUN cd /root/nlpipe && pytest -v tests && cd /
 # End stuff for NLPipe platform
 
