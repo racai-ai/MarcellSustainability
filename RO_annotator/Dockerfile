@@ -72,6 +72,9 @@ COPY docker/perl-check-install.sh /root/
 RUN chmod a+rx /root/perl-check-install.sh && /root/perl-check-install.sh
 # No need for it, function performed
 RUN rm -fv /root/perl-check-install.sh
+# Debug
+COPY docker/nlpipe-run-ws.sh /root/
+RUN chmod a+rx /root/nlpipe-run-ws.sh
 # End stuff for NLPipe platform
 
 RUN sed -i "s/error_reporting = .*$/error_reporting = E_ERROR | E_WARNING | E_PARSE/" /etc/php/7.2/apache2/php.ini
