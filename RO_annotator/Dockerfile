@@ -33,7 +33,8 @@ RUN cpan -i Unicode::String
 RUN cpan -i Algorithm::Diff
 RUN cpan -i BerkeleyDB
 RUN cpan -i File::Which
-RUN cpan -i File::HomeDir
+COPY docker/cpan-install-homedir.sh /root/
+RUN chmod a+rx /root/cpan-install-homedir.sh && /root/cpan-install-homedir.sh
 # Copy NLPipe resources
 RUN wget http://relate.racai.ro/resources/nlpipe/nlpipe-resources.tar.gz -O /root/nlpipe-resources.tar.gz && \
     tar -C /root -xzvf /root/nlpipe-resources.tar.gz && rm -fv /root/nlpipe-resources.tar.gz
@@ -70,6 +71,8 @@ RUN cd /root/nlpipe && chmod a+rx *.sh && cd /
 COPY docker/perl-check-install.sh /root/
 RUN chmod a+rx /root/perl-check-install.sh && /root/perl-check-install.sh
 RUN cd /root/nlpipe && pytest -v tests && cd /
+# No need for it, function performed
+RUN rm -fv /root/perl-check-install.sh
 # End stuff for NLPipe platform
 
 RUN sed -i "s/error_reporting = .*$/error_reporting = E_ERROR | E_WARNING | E_PARSE/" /etc/php/7.2/apache2/php.ini
