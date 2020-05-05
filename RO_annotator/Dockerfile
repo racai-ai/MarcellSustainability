@@ -70,7 +70,6 @@ RUN cd /root/nlpipe && chmod a+rx *.sh && cd /
 # These should PASS, othewise the build has to fail
 COPY docker/perl-check-install.sh /root/
 RUN chmod a+rx /root/perl-check-install.sh && /root/perl-check-install.sh
-RUN cd /root/nlpipe && pytest -v tests && cd /
 # No need for it, function performed
 RUN rm -fv /root/perl-check-install.sh
 # End stuff for NLPipe platform
