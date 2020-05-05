@@ -32,6 +32,7 @@ COPY docker/MyConfig.pm /root/.cpan/CPAN
 RUN cpan -i Unicode::String
 RUN cpan -i Algorithm::Diff
 RUN cpan -i BerkeleyDB
+RUN cpan -i File::Which
 RUN cpan -i File::HomeDir
 # Copy NLPipe resources
 RUN wget http://relate.racai.ro/resources/nlpipe/nlpipe-resources.tar.gz -O /root/nlpipe-resources.tar.gz && \
