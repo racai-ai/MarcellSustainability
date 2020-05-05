@@ -53,8 +53,10 @@ RUN apt-get update && apt-get install -y libdb5.3 libdb5.3++ python3.6 python3-p
 ENV PERL5VER `perl -V:version | grep -Po "5\.[0-9]+(?:\.[0-9]+)?"`
 # If perl version changes... No problem, we have PERL5VER now
 ENV PERL5LIB /root/perl/lib/x86_64-linux-gnu/perl/${PERL5VER}:/root/perl/share/perl/${PERL5VER}
-COPY --from=intermediate /root/perl/ /root/
-COPY --from=intermediate /root/.nlpipe/ /root/
+RUN mkdir /root/perl
+RUN mkdir /root/.nlpipe
+COPY --from=intermediate /root/perl/ /root/perl/
+COPY --from=intermediate /root/.nlpipe/ /root/.nlpipe/
 # These are the NLPipe Python 3.6 dependencies
 RUN pip3 install nlpcube
 RUN pip3 install filelock
@@ -62,7 +64,8 @@ RUN pip3 install flask
 RUN pip3 install flask-restful
 RUN pip3 install uwsgi
 RUN pip3 install pytest
-COPY nlpipe/ /root/
+RUN mkdir /root/nlpipe
+COPY nlpipe/ /root/nlpipe/
 RUN cd /root/nlpipe && chmod a+rx *.sh && cd /
 # These should PASS, othewise the build has to fail
 RUN cd /root/nlpipe && perl -c PipTTL.pl && cd /
