@@ -31,7 +31,7 @@ COPY annotate/ /var/www/site/
 RUN chmod a+rw /var/www/site/corrector
 # Install stuff for the NLPipe platform
 # Install Perl5 only if it's not installed (it usually is)
-RUN test `perl -e "print(\"Works.\")"` != "Works." && apt-get install -y perl
+RUN 'test `perl -e "print(\"Works.\")"` != "Works." && apt-get install -y perl'
 # Need g++ and make for cpan install
 RUN apt-get install -y wget curl make automake autoconf gcc g++ flex bison
 # Needed by BerkeleyDB Perl module
