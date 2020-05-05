@@ -39,7 +39,7 @@ class EntityDB {
           "entities"=>array_values($this->knownEntities),
           "links"=>array_values($this->links)
       ];
-      file_put_contents($fname,json_encode($this->data));
+      @file_put_contents($fname,json_encode($this->data));
   }
   
   public function getEntitiesFromTokens($sent){

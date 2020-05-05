@@ -7,7 +7,7 @@ function logNer($msg){
     $path.="/".date("m");  @mkdir($path);
     $path.="/".date("d");
     
-    file_put_contents($path,"*****************\n".date("c")." Message:\n".$msg."\n",FILE_APPEND);
+    @file_put_contents($path,"*****************\n".date("c")." Message:\n".$msg."\n",FILE_APPEND);
 
 }
 
