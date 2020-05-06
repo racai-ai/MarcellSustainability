@@ -42,7 +42,8 @@ RUN wget http://relate.racai.ro/resources/nlpipe/nlpipe-resources.tar.gz -O /roo
 
 FROM ubuntu:18.04
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y cron zip unzip apache2 php7.2 libapache2-mod-php7.2 curl php7.2-mbstring php7.2-curl
+RUN apt-get update && apt-get install -y cron zip unzip apache2 php7.2 libapache2-mod-php7.2 curl php7.2-mbstring php7.2-curl locales
+RUN locale-gen en_US.UTF-8
 RUN mkdir -p /var/www/site && a2enmod php7.2 && a2enmod rewrite
 COPY --from=intermediate /ner/ /ner/
 COPY --from=intermediate /ner/web/ /var/www/site/
@@ -89,6 +90,10 @@ ENV APACHE_RUN_GROUP www-data
 ENV APACHE_LOG_DIR /var/log/apache2
 ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_PID_FILE /var/run/apache2.pid
+
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
 
 ADD docker/apache-config.conf /etc/apache2/sites-enabled/000-default.conf
 
