@@ -1,9 +1,0 @@
-Internally ner_server.sh will listen on 127.0.0.1:8011
-
-the stanford ner change will try to connect to 127.0.0.1:80/word_embeddings/ws/wordvectors_get.php?w1=
-
-this in turn will try to connect to 127.0.0.1:8001/wordvectors_get? => this is a fasttext-mod server
-
-IATE-EUROVOC will listen on 9001
-
-nice guide for apache+php on ubuntu base image: https://writing.pupius.co.uk/apache-and-php-on-docker-44faef716150
