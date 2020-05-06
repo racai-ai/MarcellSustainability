@@ -74,10 +74,12 @@ RUN cd /root/nlpipe && chmod a+rx *.sh && cd /
 # These should PASS, othewise the build has to fail
 COPY docker/perl-check-install.sh /root/
 RUN chmod a+rx /root/perl-check-install.sh && /root/perl-check-install.sh
+# This has to be run after the machine starts and NER
+# loads and starts running.
 COPY docker/nlpipe-check-install.sh /root/
-RUN chmod a+rx /root/nlpipe-check-install.sh && /root/nlpipe-check-install.sh
+RUN chmod a+rx /root/nlpipe-check-install.sh
 # Remove check scripts
-RUN rm -fv /root/perl-check-install.sh /root/nlpcube-install-resources.py /root/nlpipe-check-install.sh
+RUN rm -fv /root/perl-check-install.sh /root/nlpcube-install-resources.py
 # End stuff for NLPipe platform
 
 RUN sed -i "s/error_reporting = .*$/error_reporting = E_ERROR | E_WARNING | E_PARSE/" /etc/php/7.2/apache2/php.ini
