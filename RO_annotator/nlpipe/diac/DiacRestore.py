@@ -1,6 +1,6 @@
 from PipApi import PipApi
 from PipAlgo import PipAlgo
-from PipConfig import DIACMODELFILE
+from PipConfig import DIACMODELFILE, DIACWFREQFILE
 import unicodedata as uc
 import math
 import os
@@ -32,13 +32,18 @@ class DiacRestore(PipApi):
     """This is a Python 3 port of Tiberiu Boroș's DiacRestore Java app,
     used in the Corola pipeline. No references so far."""
     
-    diacValidPerc = 0.03
+    # If percent of invalid words is at least this,
+    # perform diacritic restoration.
+    # An 'invalid word' is a word that lacks required
+    # diacritics, such as 'masina' -> 'mașina' or 'mașină'.
+    diacInvalidPercent = 0.03
     intPattern = re.compile("^[0-9]+$")
 
     def __init__(self):
         super().__init__()
         self._algoName = PipAlgo.algoDiac
         self._wrd2List = {}
+        self._wrdFreq = {}
         self._ngrams = {}
         self._totalUni = 0
 
@@ -143,38 +148,53 @@ class DiacRestore(PipApi):
         if lowerWordForm not in self._wrd2List[stripped]:
             self._wrd2List[stripped].append(lowerWordForm)
 
-    def _getRoWordsPercent(self, tokens: list) -> float:
-        """Computes a percent of words that are valid
-        in Romanian."""
+    def _isRestoreRequired(self, tokens: list) -> bool:
+        """Decides if the current text has enough invalid
+        words such that a recovery is in order."""
 
         # Invalid word count
-        invc = 0
-        # No diacs word count
-        strc = 0
+        iwc = 0
+        # Words with possible diacritics count
+        dwc = 0
 
         for tok in tokens:
             if tok._isRoWord:
                 word = tok._token.lower()
 
                 if word in self._wrd2List:
-                    strc += 1
+                    dwc += 1.0
+                    
+                    if word not in self._wrd2List[word]:
+                        iwc += 1.0
+                    elif len(self._wrd2List[word]) >= 2:
+                        # If word is e.g. 'si' but the more
+                        # frequent form is 'și', we add this
+                        # to the invalid count.
+                        # Same with 'in' vs. 'în'.
+                        w1 = self._wrd2List[word][0]
+                        w2 = self._wrd2List[word][1]
 
-                    if not word in self._wrd2List[word]:
-                        invc += 1
+                        if w1 in self._wrdFreq and w2 in self._wrdFreq:
+                            w1f = self._wrdFreq[w1]
+                            w2f = self._wrdFreq[w2]
+                            iwc += (1.0 - float(w2f) / float(w1f))
         # end for tok
-        if strc > 0:
-            return invc / strc
+        
+        if dwc > 0:
+            iwPerc = float(iwc) / float(dwc)
 
-        return 0.0
+            if iwPerc >= DiacRestore.diacInvalidPercent:
+                return True
+
+        return False
 
     def _restore(self, text: str) -> str:
         """This is the main method of the class. Give it a text
         and get back the text with diacritics."""
 
         tokens = DiacRestore.getWords(text)
-        rop = self._getRoWordsPercent(tokens)
-        
-        if rop <= DiacRestore.diacValidPerc:
+
+        if not self._isRestoreRequired(tokens):
             return text
 
         dtokens = self._viterbiDecoder(tokens)
@@ -309,8 +329,27 @@ class DiacRestore(PipApi):
 
         return dto
 
+    def _readWordFreqFile(self):
+        """Reads in the word frequency file with which we
+        decide which word form is more likely."""
+
+        with open(DIACWFREQFILE, mode='r', encoding='utf-8') as f:
+            for line in f:
+                parts = line.strip().split()
+                word = parts[0].lower()
+                freq = int(parts[1])
+
+                if len(parts) == 2:
+                    if word not in self._wrdFreq:
+                        self._wrdFreq[word] = freq
+                    else:
+                        self._wrdFreq[word] += freq
+                # end if
+            # end for line
+        # end with
+
     def loadResources(self):
-        f = open(DIACMODELFILE, mode = "r", encoding = "utf-8")
+        f = open(DIACMODELFILE, mode="r", encoding="utf-8")
         line = f.readline().strip()
         count = int(line)
 
@@ -401,3 +440,31 @@ class DiacRestore(PipApi):
             self._appendWF(ngram)
 
         f.close()
+
+        # Reads word frequencies
+        print("{0}.{1}[{2}]: reading word frequency file".
+            format(
+                Path(inspect.stack()[0].filename).stem,
+                inspect.stack()[0].function,
+                inspect.stack()[0].lineno,
+                i,
+                count
+            ), file=sys.stderr, flush=True)
+
+        self._readWordFreqFile()
+
+        print("{0}.{1}[{2}]: sorting variants by frequency".
+            format(
+                Path(inspect.stack()[0].filename).stem,
+                inspect.stack()[0].function,
+                inspect.stack()[0].lineno,
+                i,
+                count
+            ), file=sys.stderr, flush=True)
+
+        # Sort entries in self._wrd2List by frequency
+        for wnd in self._wrd2List:
+            self._wrd2List[wnd].sort(
+                key=lambda x: self._wrdFreq[x] if x in self._wrdFreq else 0,
+                reverse=True
+            )

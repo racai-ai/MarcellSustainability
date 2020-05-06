@@ -42,6 +42,21 @@ def test_DiacRestore():
     # spațiu
     assert dto.getText()[105] == 'ț'
 
+def test_DiacRestore2():
+    dto = nlpipe.pcExec(text2, [PipAlgo.getDiacRestorationOperName()])
+
+    assert dto.getText()[0] == 'Ș'
+    assert dto.getText()[6] == 'ă'
+    assert dto.getText()[17] == 'ț'
+    assert dto.getText()[24] == 'ă'
+
+def test_DiacRestore3():
+    dto = nlpipe.pcExec(text3, [PipAlgo.getDiacRestorationOperName()])
+
+    assert dto.getText()[6] == 'ț'
+    assert dto.getText()[15] == 'ă'
+    assert dto.getText()[25] == 'ă'
+
 def test_TTL():
     nlpipe.configure(PipAlgo.getSentenceSplittingOperName(), PipAlgo.algoTTL)
     nlpipe.configure(PipAlgo.getTokenizationOperName(), PipAlgo.algoTTL)

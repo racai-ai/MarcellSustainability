@@ -10,6 +10,10 @@ DIACMODELFILE = os.path.expanduser("~") + \
     os.sep + _configFolderName + \
     os.sep + "diac.model.newsty"
 
+DIACWFREQFILE = os.path.expanduser("~") + \
+    os.sep + _configFolderName + \
+    os.sep + "ro-marcell-freq.txt"
+
 # Path to tbl.wordform.ro.v85 lexicon file
 # Used by NLP-Cube to do better lemmatization
 TBLWORDFORMFILE = os.path.expanduser("~") + \
