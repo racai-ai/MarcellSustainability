@@ -2,6 +2,7 @@
 
 function testNER($tokData){
     $url="http://127.0.0.1:8002/ner/ner.php";
+//    $url="http://corolaws.racai.ro/ner/ner.php";
     
     $curl = curl_init();
     
@@ -38,7 +39,7 @@ function testNER($tokData){
     return $response;
 }
 
-$tokdata=file_get_contents("testner.test");
+$tokdata=file_get_contents("test-ner-2.test");
 var_dump(testNER($tokdata));
 
 ?>
