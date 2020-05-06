@@ -168,6 +168,6 @@ api.add_resource(NLPipeREST, '/process', resource_class_args=[nlpipe])
 
 # WARNING!
 # If you run this with uwsgi, comment out the next 3 lines.
-api.add_resource(
-    NLPipeTerminate, '/server-shutdown-now', resource_class_args=[nlpipe])
-app.run(host = '127.0.0.1', port = 5000)
+#api.add_resource(
+#    NLPipeTerminate, '/server-shutdown-now', resource_class_args=[nlpipe])
+#app.run(host = '127.0.0.1', port = 5000)
