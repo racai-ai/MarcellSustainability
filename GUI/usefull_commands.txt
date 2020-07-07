@@ -7,4 +7,6 @@ Log files are set to stdout/stderr:
 
 docker logs marcell
 
+- cleanup
+docker image prune
 

@@ -8,9 +8,17 @@
 
 "tools.java.path":"/data/programs/jdk1.8.0_231/bin/java",
 
-"tools.python.venv":"/data/venv_keras",
+"tools.python.venv":"/venv",
 
 "owner_user":"www-data",
-"owner_group":"www-data"
+"owner_group":"www-data",
+
+"marcell.bg.url":"http://relate.racai.ro:8004/annotate.php",
+"marcell.hr.url":"http://relate.racai.ro:8999/annotate.php",
+"marcell.hu.url":"http://relate.racai.ro:8999/annotate.php",
+"marcell.pl.url":"http://relate.racai.ro:8999/annotate.php",
+"marcell.ro.url":"http://relate.racai.ro:8002/annotate.php",
+"marcell.sk.url":"http://relate.racai.ro:8003/cgi-bin/annotate",
+"marcell.si.url":"http://relate.racai.ro:8999/annotate.php"
 
 }
