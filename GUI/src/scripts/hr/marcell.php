@@ -7,7 +7,7 @@ function runMarcell_hr($text,$meta,$fnameOut,$foutPath){
     
     $data=MARCELL_call(
 	$settings->get("marcell.hr.url","http://127.0.0.1/annotate"),
-	["text"=>$text, "meta"=>$meta, "docid"=>$docid]
+	["text"=>$text, "metadata"=>$meta]
     );
     
     file_put_contents($foutPath,$data);

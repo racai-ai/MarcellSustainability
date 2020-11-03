@@ -24,6 +24,7 @@ function runMarcell_internal($text,$fout){
     if(is_file($metaPath.".xml"))$meta=file_get_contents($metaPath.".xml");
     else if(is_file($metaPath.".meta"))$meta=file_get_contents($metaPath.".meta");
     else if(is_file($metaPath.".metadata"))$meta=file_get_contents($metaPath.".metadata");
+    else if(is_file($metaPath.".json"))$meta=file_get_contents($metaPath.".json");
     else echo "METADATA file not found for [$metaPath]\n";
 
     // For Romanian we need to determine the final filename/docid
@@ -97,12 +98,71 @@ function MARCELL_call($url,$data,$debug=false){
     ini_set("default_socket_timeout", 600);
     
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0); 
-    curl_setopt($ch, CURLOPT_TIMEOUT_MS, 600 * 1000); //timeout in seconds
+    curl_setopt($ch, CURLOPT_TIMEOUT_MS, 20 * 60 * 1000); //timeout in seconds
     curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
     curl_setopt($ch, CURLOPT_URL,$url);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:'));
+    if($debug)curl_setopt($ch, CURLOPT_VERBOSE, 1); 
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+    $server_output = curl_exec($ch);
+    
+    curl_close ($ch);
+    
+    return $server_output;
+
+}
+
+
+
+function MARCELL_callWithFiles($url,$dataFiles,$debug=false){
+
+    echo "MARCELL_callWithFiles [$url]\n";
+
+    if(!isset($dataFiles['text']) && !isset($dataFiles['file']))return false;
+
+    $ch = curl_init();
+  
+    set_time_limit(0);
+    ini_set("default_socket_timeout", 600);
+    
+    $boundary = uniqid();
+    $delimiter = '-------------' . $boundary;
+    $eol = "\r\n";
+    $data="";
+    foreach($dataFiles as $key=>$content){
+	$fname=$key;
+	if(is_array($content)){
+	    $fname=$content['fname'];
+	    $content=$content['content'];
+	}
+    $data .= "--" . $delimiter . $eol
+                . 'Content-Disposition: form-data; name="'.$key.'"; filename="'.$fname.'"'.$eol
+                . 'Content-type: text/plain'.$eol.$eol
+                . $content . $eol;
+    }
+//    $data .= "--" . $delimiter . $eol
+//                . 'Content-Disposition: form-data; name="meta"; filename="meta"'.$eol
+//                . 'Content-type: application/octet-stream'.$eol.$eol
+//                . $dataFiles['meta'] . $eol;
+    $data .= "--" . $delimiter . "--".$eol;
+
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0); 
+    curl_setopt($ch, CURLOPT_TIMEOUT_MS, 20 * 60 * 1000); //timeout in seconds
+    curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+    curl_setopt($ch, CURLOPT_URL,$url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+	'Expect:',
+        "Content-Type: multipart/form-data; boundary=" . $delimiter,
+        "Content-Length: " . strlen($data)
+	
+    ));
     if($debug)curl_setopt($ch, CURLOPT_VERBOSE, 1); 
 
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

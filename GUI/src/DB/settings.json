@@ -1,7 +1,7 @@
 {
 
 "RegistrationEnabled":false,
-"TaskRunners":13,
+"TaskRunners":1,
 
 "tools.StanfordCoreNLP.path":"/data/vasile/stanford-corenlp-full-2018-10-05",
 "tools.wc.path":"/usr/bin/wc",
@@ -14,11 +14,11 @@
 "owner_group":"www-data",
 
 "marcell.bg.url":"http://relate.racai.ro:8004/annotate.php",
-"marcell.hr.url":"http://relate.racai.ro:8999/annotate.php",
-"marcell.hu.url":"http://relate.racai.ro:8999/annotate.php",
-"marcell.pl.url":"http://relate.racai.ro:8999/annotate.php",
+"marcell.hr.url":"http://relate.racai.ro:8008/annotate",
+"marcell.hu.url":"http://relate.racai.ro:8007/annotate",
+"marcell.pl.url":"http://relate.racai.ro:8006/annotate",
 "marcell.ro.url":"http://relate.racai.ro:8002/annotate.php",
 "marcell.sk.url":"http://relate.racai.ro:8003/cgi-bin/annotate",
-"marcell.si.url":"http://relate.racai.ro:8999/annotate.php"
+"marcell.si.url":"http://relate.racai.ro:8005/annotate"
 
 }

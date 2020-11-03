@@ -2,7 +2,7 @@ FROM alpine as intermediate
 LABEL stage=intermediate
 RUN apk update && \
     apk add --update git
-RUN git clone https://github.com/racai-ai/RELATE.git
+RUN git clone --depth 1 --branch MarcellGUIBase_1.0 https://github.com/racai-ai/RELATE.git
 RUN rm -fr /RELATE/src/pages/{corola,my,papers,robin,rown,teprolin,translate} ; \
     rm -f /RELATE/src/{menu,handlers}.php
 

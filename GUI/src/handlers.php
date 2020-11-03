@@ -27,6 +27,7 @@ registerHandler("corpus/file_getdownload","pages/corpus/file_getdownload.php",tr
 registerHandler("corpus/task_getallbycorpus","pages/corpus/task_getallbycorpus.php",true,["corpus"]);
 registerHandler("corpus/task_add","pages/corpus/task_add.php",true,["corpus"]);
 registerHandler("corpus/archives_get","pages/corpus/archives_get.php",true,["corpus"]);
+registerHandler("corpus/data/add","data/corpus/add_file.php",true,["corpus"]);
 
 
 ?>

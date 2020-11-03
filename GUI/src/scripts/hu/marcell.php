@@ -5,9 +5,10 @@ function runMarcell_hu($text,$meta,$fnameOut,$foutPath){
     
     $docid=substr($fnameOut,0,strrpos($fnameOut,"."));
     
-    $data=MARCELL_call(
+    $data=MARCELL_callWithFiles(
 	$settings->get("marcell.hu.url","http://127.0.0.1/annotate"),
-	["text"=>$text, "meta"=>$meta, "docid"=>$docid]
+	["file"=>["content"=>$text."\n", "fname"=>$docid.".txt"]],
+	true
     );
     
     file_put_contents($foutPath,$data);

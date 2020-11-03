@@ -5,7 +5,7 @@ function runMarcell_pl($text,$meta,$fnameOut,$foutPath){
     
     $docid=substr($fnameOut,0,strrpos($fnameOut,"."));
     
-    $data=MARCELL_call(
+    $data=MARCELL_callWithFiles(
 	$settings->get("marcell.pl.url","http://127.0.0.1/annotate"),
 	["text"=>$text, "meta"=>$meta, "docid"=>$docid]
     );

@@ -7,8 +7,7 @@ function runMarcell_bg($text,$meta,$fnameOut,$foutPath){
     
     $data=MARCELL_call(
 	$settings->get("marcell.bg.url","http://127.0.0.1/annotate"),
-	["text"=>$text, "meta"=>$meta, "docid"=>$docid],
-	true
+	["text"=>$text, "meta"=>$meta, "docid"=>$docid]
     );
     
     file_put_contents($foutPath,$data);
