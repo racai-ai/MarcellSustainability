@@ -1,4 +1,4 @@
 #!/bin/sh
 
-docker exec -it marcell-ro-ner-running bash
+docker exec -it marcell-ro-running bash
 

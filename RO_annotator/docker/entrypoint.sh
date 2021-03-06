@@ -8,6 +8,8 @@ cron &
 
 cd /ner/IATE-EUROVOC-Annotator/ ; ./annotate server 9001 &
 
+cd /EUROVOC-CLASS/ ; ./fasttext-static server eurovoc.ro.bin 9002 &
+
 export PERL5VER=`perl -V:version | grep -Po "5\.[0-9]+(?:\.[0-9]+)?"`
 export PERL5LIB=/root/perl/lib/x86_64-linux-gnu/perl/$PERL5VER:/root/perl/share/perl/$PERL5VER
 

@@ -23,11 +23,20 @@ require_once "${LIB_PATH}/files.php";
 
 require_once "${LIB_PATH}/config.php";
 
+require_once "${LIB_PATH}/conllup.php";
+require_once "${LIB_PATH}/ConllupSentence.php";
+require_once "${LIB_PATH}/ConllupSentenceIterator.php";
+require_once "${LIB_PATH}/ConllupToken.php";
+require_once "${LIB_PATH}/ConllupTokenIterator.php";
+
 require_once "${LIB_PATH}/settings.php";
 require_once "${LIB_PATH}/user.php";
 require_once "${LIB_PATH}/locking.php";
 
 require_once "${LIB_PATH}/teprolin.php";
+require_once "${LIB_PATH}/eurovoc.php";
+require_once "${LIB_PATH}/ServerFastText.php";
+require_once "${LIB_PATH}/EUROVOC_Classifier.php";
 require_once "${LIB_PATH}/rown.php";
 require_once "${LIB_PATH}/handlers.php";
 require_once "${LIB_PATH}/theme_utils.php";

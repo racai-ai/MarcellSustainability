@@ -542,7 +542,8 @@ function viewFileCSV(file,type){
                 { title: "NER", dataType: "string", dataIndx: "10", filter: { type: 'textbox', condition: 'contain', listeners: ['keyup'] }  },
                 { title: "NP", dataType: "string", dataIndx: "11", filter: { type: 'textbox', condition: 'contain', listeners: ['keyup'] }  },
                 { title: "IATE", dataType: "string", dataIndx: "12", filter: { type: 'textbox', condition: 'contain', listeners: ['keyup'] }  },
-                { title: "EUROVOC", dataType: "string", dataIndx: "13", filter: { type: 'textbox', condition: 'contain', listeners: ['keyup'] }  }
+                { title: "EuroVocID", dataType: "string", dataIndx: "13", filter: { type: 'textbox', condition: 'contain', listeners: ['keyup'] }  },
+                { title: "EuroVocMT", dataType: "string", dataIndx: "14", filter: { type: 'textbox', condition: 'contain', listeners: ['keyup'] }  }
             ];
     }else if(type==="csv2"){
         obj.colModel = [

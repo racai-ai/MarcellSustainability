@@ -4,7 +4,8 @@ require_once "lib/lib.php";
 require_once "steps/1_basic_tagging.php";
 require_once "steps/2_iate_eurovoc.php";
 require_once "steps/3_cleanup.php";
-require_once "steps/4_export_marcell.php";
+require_once "steps/4_eurovoc_class.php";
+require_once "steps/5_export_marcell.php";
 
 
 $text="Se aprobă publicarea Tabloului executorilor judecătorești pentru anul 2020 în Monitorul Oficial al României, Partea I, prevăzut în anexa care face parte integrantă din prezenta hotărâre.";
@@ -56,6 +57,13 @@ echo "\n\n\n";
 
 echo "***********************************\n";
 echo "STEP 4\n";
+$ann=runEurovocClass($ann);
+var_dump($ann);
+echo "\n\n\n";
+
+
+echo "***********************************\n";
+echo "STEP 5\n";
 $java="/ner/jdk1.8.0_191/bin/java";
 //$java="/data/programs/jdk1.8.0_231/bin/java";
 $tmpfolder=uniqid("r",true);

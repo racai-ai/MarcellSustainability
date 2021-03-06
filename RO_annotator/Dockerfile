@@ -3,6 +3,8 @@ LABEL stage=intermediate
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y git wget curl make automake autoconf gcc g++ flex bison
+
+# NER resources
 RUN mkdir ner
 RUN wget http://relate.racai.ro/resources/ner/ner.tar.bz2 -O /ner.tar.bz2 && tar -jxf ner.tar.bz2
 RUN wget http://relate.racai.ro/resources/ner/COROLA.vectors.gz -O /ner/COROLA.vectors.gz && gunzip /ner/COROLA.vectors.gz
@@ -14,12 +16,24 @@ RUN wget http://relate.racai.ro/resources/ner/web.tar.bz2 -O /ner/web.tar.bz2 &&
 RUN wget http://relate.racai.ro/resources/ner/fasttext-0.1.0-mod.tar.bz2 -O /ner/fasttext-0.1.0-mod.tar.bz2 && tar -C /ner -jxf /ner/fasttext-0.1.0-mod.tar.bz2 && rm -f /ner/fasttext-0.1.0-mod.tar.bz2
 RUN cd /ner/fastText-0.1.0-mod && make fasttext && cd /
 RUN wget http://relate.racai.ro/resources/ner/corola.300.20.5.bin -O /ner/corola.300.20.5.bin
+
+# IATE-EUROVOC Annotator
 RUN git clone https://github.com/racai-ai/IATE-EUROVOC-Annotator.git /ner/IATE-EUROVOC-Annotator-build
 RUN cd /ner/IATE-EUROVOC-Annotator-build/src && make all && cd /
 RUN mkdir /ner/IATE-EUROVOC-Annotator
 RUN cp /ner/IATE-EUROVOC-Annotator-build/src/annotate /ner/IATE-EUROVOC-Annotator
 RUN cp -r /ner/IATE-EUROVOC-Annotator-build/resources /ner/IATE-EUROVOC-Annotator
 RUN rm -fr /ner/IATE-EUROVOC-Annotator-build
+
+# EuroVoc Classifier
+RUN git clone https://github.com/racai-ai/ServerFastText.git /ner/EUROVOC-CLASS-build
+RUN cd /ner/EUROVOC-CLASS-build/source && make fasttext-static && cd /
+RUN mkdir /EUROVOC-CLASS
+RUN cp /ner/EUROVOC-CLASS-build/fasttext-static /EUROVOC-CLASS
+RUN rm -fr /ner/EUROVOC-CLASS-build
+RUN wget https://relate.racai.ro/resources/EUROVOC/eurovoc.ro.bin -O /EUROVOC-CLASS/eurovoc.ro.bin
+
+
 # Install Perl CPAN packages for NLPipe
 # Install Perl5 only if it's not installed (it usually is)
 RUN command -v perl >/dev/null || apt-get install -y perl
@@ -46,6 +60,7 @@ RUN apt-get update && apt-get install -y cron zip unzip apache2 php7.2 libapache
 RUN locale-gen en_US.UTF-8
 RUN mkdir -p /var/www/site && a2enmod php7.2 && a2enmod rewrite
 COPY --from=intermediate /ner/ /ner/
+COPY --from=intermediate /EUROVOC-CLASS/ /EUROVOC-CLASS/
 COPY --from=intermediate /ner/web/ /var/www/site/
 COPY annotate/ /var/www/site/
 RUN chmod a+rw /var/www/site/corrector
