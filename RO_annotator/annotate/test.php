@@ -5,7 +5,8 @@ require_once "steps/1_basic_tagging.php";
 require_once "steps/2_iate_eurovoc.php";
 require_once "steps/3_cleanup.php";
 require_once "steps/4_eurovoc_class.php";
-require_once "steps/5_export_marcell.php";
+require_once "steps/5_correct_terms.php";
+require_once "steps/6_export_marcell.php";
 
 
 $text="Se aprobă publicarea Tabloului executorilor judecătorești pentru anul 2020 în Monitorul Oficial al României, Partea I, prevăzut în anexa care face parte integrantă din prezenta hotărâre.";
@@ -34,7 +35,7 @@ EOT;
 
 $docid="mj_XXXXXX";
 
-$columns="# global.columns = ID FORM LEMMA UPOS XPOS FEATS HEAD DEPREL DEPS MISC MARCELL:NE MARCELL:NP MARCELL:IATE MARCELL:EUROVOC";
+$columns="# global.columns = ID FORM LEMMA UPOS XPOS FEATS HEAD DEPREL DEPS MISC MARCELL:NE MARCELL:NP MARCELL:IATE MARCELL:EUROVOC MARCELL:EUROVOCMT";
 
 echo "***********************************\n";
 echo "STEP 1\n";
